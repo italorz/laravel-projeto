@@ -4,12 +4,12 @@
     </div>
 @endif
 @if(session('error'))
-    <div class="alert alert-error" role="alert">
+    <div class="alert alert-danger" role="alert">
         {{ session('error') }}
     </div>
 @endif
 @if($errors->any())
-    <div class="alert alert-error" role="alert">
+    <div class="alert alert-danger" role="alert">
         <strong>Erros no formulário:</strong>
         <ul>
             @foreach($errors->all() as $error)

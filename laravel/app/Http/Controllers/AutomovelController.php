@@ -14,8 +14,12 @@ class AutomovelController extends Controller
 
     public function index(Request $request)
     {
-        $automoveis = $this->repo->paginateWithSearch($request->get('search'));
-        return view('automoveis.index', compact('automoveis'));
+        $montadoras = Montadora::orderBy('nome')->get();
+
+        $montadoraId = $request->integer('montadora_id') ?: null;
+        $automoveis = $this->repo->paginateWithMontadora($montadoraId);
+
+        return view('automoveis.index', compact('automoveis', 'montadoras'));
     }
 
     public function create()
@@ -57,5 +61,13 @@ class AutomovelController extends Controller
     {
         $this->repo->delete($automovel->id);
         return redirect()->route('automovel.index')->with('success', 'Automóvel excluído com sucesso');
+    }
+    public function getByMontadora(int $id)
+    {
+        try {
+            return redirect()->route('automovel.index', ['montadora_id' => $id]);
+        } catch (\Exception $e) {
+            return redirect()->route('automovel.index')->with('error', 'Erro ao buscar automóveis');
+        }
     }
 }

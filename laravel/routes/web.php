@@ -11,6 +11,7 @@ Route::prefix('/automovel')->name('automovel.')->group(function () {
     Route::get('/{automovel}/edit', [AutomovelController::class, 'edit'])->name('edit');
     Route::put('/{automovel}', [AutomovelController::class, 'update'])->name('update');
     Route::delete('/{automovel}', [AutomovelController::class, 'destroy'])->name('destroy');
+    Route::get('/montadora/{id}/automoveis', [AutomovelController::class, 'getByMontadora'])->name('getByMontadora');
 });
 
 

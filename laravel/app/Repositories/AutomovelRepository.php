@@ -8,35 +8,36 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class AutomovelRepository implements AutomovelRepositoryInterface
 {
-    public function paginateWithSearch(?string $string): LengthAwarePaginator
+    function __construct(private Automovel $automovel) {}
+    public function paginateWithMontadora(?int $montadoraId = null): LengthAwarePaginator
     {
-        return Automovel::query()
+        return $this->automovel->query()
             ->with('montadora')
-            ->when($string, function ($query, $string) {
-                $query->where('nome', 'like', "%$string%");
+            ->when($montadoraId, function ($query, $montadoraId) {
+                $query->where('montadora_id', $montadoraId);
             })
             ->paginate(10);
     }
 
     public function find(int $id): Automovel
     {
-        return Automovel::findOrFail($id);
+        return $this->automovel->findOrFail($id);
     }
 
     public function create(array $data): Automovel
     {
-        return Automovel::create($data);
+        return $this->automovel->create($data);
     }
 
     public function update(int $id, array $data): Automovel
     {
-        $automovel = Automovel::findOrFail($id);
+        $automovel = $this->automovel->findOrFail($id);
         $automovel->update($data);
         return $automovel->fresh();
     }
 
     public function delete(int $id): bool
     {
-        return Automovel::findOrFail($id)->delete();
+        return $this->automovel->find($id)->delete();
     }
 }
